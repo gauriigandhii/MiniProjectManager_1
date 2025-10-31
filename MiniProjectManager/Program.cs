@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -12,10 +11,24 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
-
 builder.Services.AddScoped<AuthService>();
 
-// JWT Authentication setup
+// ✅ CORS setup
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins(
+            "http://localhost:3000",                        // local dev
+            "https://mini-project-manager-1.vercel.app"     
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+    });
+});
+
+// ✅ JWT setup
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -29,11 +42,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Database setup (SQLite)
+// ✅ Database setup
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Swagger + JWT setup
+// ✅ Swagger + JWT setup
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -61,25 +74,10 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowReactApp", policy =>
-    {
-        policy.WithOrigins(
-            "http://localhost:3000",                        // local dev
-            "https://mini-project-manager-1.vercel.app"     // deployed frontend
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
-});
-
-
-
 
 var app = builder.Build();
 
-// Configure the HTTP pipeline
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -87,8 +85,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowReactApp");
 
+// 🔥 CORS must come before Authentication & Authorization
+app.UseCors("AllowReactApp");
 
 app.UseAuthentication();
 app.UseAuthorization();
