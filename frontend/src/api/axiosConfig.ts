@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5236", // your .NET backend URL
+  baseURL: "https://miniprojectmanager-1-dhhu.onrender.com", 
 });
 
 export default api;
+
