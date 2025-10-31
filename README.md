@@ -1,3 +1,5 @@
+Backedn deployed on https://miniprojectmanager-1-dhhu.onrender.com
+
 Login
 <img width="1369" height="611" alt="image" src="https://github.com/user-attachments/assets/c69cd7ac-344c-4110-8674-21fece50d22d" />
 
@@ -12,8 +14,7 @@ Dashboard
 Task
 <img width="1596" height="608" alt="image" src="https://github.com/user-attachments/assets/77551b97-dd9c-4aab-ac06-05755aae2a58" />
 
-Delete
-![Uploading image.png…]()
+
 
 
 SmartSchedule
