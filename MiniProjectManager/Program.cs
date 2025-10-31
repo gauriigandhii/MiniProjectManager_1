@@ -65,12 +65,15 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:3000") // your frontend URL
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // 🔥 required for withCredentials:true
-    });
+        policy.WithOrigins(
+            "http://localhost:3000",                        // local dev
+            "https://mini-project-manager-1.vercel.app"     // deployed frontend
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
 });
+
 
 
 
